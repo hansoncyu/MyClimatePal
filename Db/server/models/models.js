@@ -3,7 +3,6 @@ var _ = require('underscore');
 
 module.exports = function(wagner, db) {
     mongoose.connect(db);
-    console.log(db);
     var Food = mongoose.model('Food', require('./food.js'), 'food');
 
     var User = mongoose.model('User', require('./user.js'), 'users');

@@ -5,14 +5,13 @@ var login = require('./login.js');
 
 module.exports = function(wagner) {
     var api = express.Router();
-    
     api.use(bodyparser.json());
-    
+
     // bootstrap login api
     wagner.invoke(function(User) {
-       login(User, api); 
+       login(User, api);
     });
-    
+
     // creates new ref food
     api.put('/me/newfood', wagner.invoke(function(Food) {
         return function(req, res) {
@@ -33,7 +32,7 @@ module.exports = function(wagner) {
             });
         };
     }));
-    
+
     // create foodEaten and update diary entry with it
     api.put('/me/diary', wagner.invoke(function(Diary, FoodEaten) {
         return function(req, res) {
@@ -47,7 +46,7 @@ module.exports = function(wagner) {
             } catch(e) {
                 return res.status(status.BAD_REQUEST).json({ error: 'No food specified!' });
             }
-        
+
             foodEaten = new FoodEaten(foodEaten);
             foodEaten.save(function(err, foodEaten) {
                if (err) {
@@ -77,7 +76,7 @@ module.exports = function(wagner) {
                          'nutrition.caloriesTotal': foodCal,
                          'impact.waterTotal': foodWater,
                          'impact.carbonTotal': foodCarbon
-                     } 
+                     }
                  };
                   Diary.findOneAndUpdate(query, diaryEntry, { upsert: true, new: true, runValidators: true }).populate('food').exec(function(err, diary) {
                       if (err) {
@@ -89,15 +88,15 @@ module.exports = function(wagner) {
             });
         };
     }));
-              
-    
+
+
     // view diary for specified date
     api.get('/me', wagner.invoke(function(Diary) {
         return function(req, res) {
             if (!req.user) {
                 return res.status(status.UNAUTHORIZED).json({ error: 'Not logged in' });
             }
-            
+
             try {
                 var date = req.query.date;
                 var userID = req.user._id;
@@ -123,14 +122,14 @@ module.exports = function(wagner) {
             });
         };
     }));
-    
+
     // delete diary entry
     api.delete('/me/remove', wagner.invoke(function(FoodEaten, Diary) {
         return function(req, res) {
             if (!req.user) {
                 return res.status(status.UNAUTHORIZED).json({ error: 'Not logged in' });
             }
-            
+
             try {
                 var entryID = req.body.entry;
             } catch(e) {
@@ -141,11 +140,11 @@ module.exports = function(wagner) {
                 if (err) {
                     return res.status(status.INTERNAL_SERVER_ERROR).json({ error: err.toString() });
                 }
-                
+
                 var foodCal = entry.nutrition.calories;
                 var foodWater = entry.impact.waterTotal;
                 var foodCarbon = entry.impact.carbonTotal;
-                
+
                 // find diary document by searching for ID in food array
                 var update = {
                     $pull: { food: entryID },
@@ -164,7 +163,7 @@ module.exports = function(wagner) {
             });
         }
     }));
-    
+
     // search for ref food to make new food eaten entry
     api.get('/search', wagner.invoke(function(Food) {
         return function(req, res) {
@@ -184,7 +183,7 @@ module.exports = function(wagner) {
             });
         };
     }));
-    
+
     // check req.body for state rendering on client side
     api.get('/check', function(req, res) {
        if (!req.user) {
@@ -192,6 +191,6 @@ module.exports = function(wagner) {
        }
        return res.json({ user: req.user });
     });
-    
+
     return api;
 };

@@ -14,8 +14,7 @@ require('./server/models/models.js')(wagner, mLab || db);
 
 // use api and static files
 app.use('/api', require('./server/api.js')(wagner));
-app.use(express.static(path.join(__dirname + '\\..\\Client', 'build')));
-console.log(__dirname + '\\..\\Client');
+app.use(express.static(path.join(__dirname + '/../Client', 'build')));
 // var URL_ROOT = 'http://localhost:5000'
 
 var server = http.createServer(app);
