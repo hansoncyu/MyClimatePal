@@ -18,6 +18,6 @@ app.use(express.static(path.join(__dirname + '\\..\\Client', 'build')));
 var URL_ROOT = 'http://localhost:8081'
 
 var server = http.createServer(app);
-server.listen(process.env.IP || "5000", function() {
+server.listen(process.env.PORT || "5000", function() {
   console.log('listening on: ' + URL_ROOT);
 });
