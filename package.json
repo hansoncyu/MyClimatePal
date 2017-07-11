@@ -24,6 +24,9 @@
     "underscore": "^1.8.3",
     "wagner-core": "^0.2.0"
   },
+  "scripts": {
+    "start": "node ./Db/server.js"
+  },
   "engines": {
     "node": "6.11.0"
   }
