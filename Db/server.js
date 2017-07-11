@@ -14,8 +14,12 @@ require('./server/models/models.js')(wagner, mLab || db);
 
 // use api and static files
 app.use('/api', require('./server/api.js')(wagner));
-app.use(express.static(path.join(__dirname + '/../Client', 'build')));
+app.use('/', express.static(path.join(__dirname + '/../Client', 'build')));
 // var URL_ROOT = 'http://localhost:5000'
+
+// route all other routes to index.html
+app.use( /^((?!\/api\/).)*$/ , express.static(path.join(__dirname + '/../Client', 'build')));
+
 
 var server = http.createServer(app);
 server.listen(process.env.PORT || "5000", function() {
