@@ -15,9 +15,10 @@ require('./server/models/models.js')(wagner, mLab || db);
 // use api and static files
 app.use('/api', require('./server/api.js')(wagner));
 app.use(express.static(path.join(__dirname + '\\..\\Client', 'build')));
-var URL_ROOT = 'http://localhost:8081'
+console.log(__dirname + '\\..\\Client');
+// var URL_ROOT = 'http://localhost:5000'
 
 var server = http.createServer(app);
 server.listen(process.env.PORT || "5000", function() {
-  console.log('listening on: ' + URL_ROOT);
+  console.log('listening on: ' + process.env.PORT);
 });
